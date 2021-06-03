@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.api.asteroid.AsteroidData
+import com.udacity.asteroidradar.api.database.AsteroidDao
+import com.udacity.asteroidradar.api.database.AsteroidDatabase
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -20,7 +23,9 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+        val dataSource = AsteroidDatabase.getInstance(requireContext()).asteroidDao
+        val viewModelFactory = MainViewModelFactory(dataSource)
+        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -46,6 +51,10 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.show_rent_menu -> viewModel.getAsteroidsByDate()
+            R.id.show_all_menu -> viewModel.getAsteroidsByWeek()
+        }
         return true
     }
 

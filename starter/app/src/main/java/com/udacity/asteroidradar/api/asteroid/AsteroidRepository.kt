@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.api.asteroid
 import android.util.Log
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
+import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -18,7 +19,7 @@ class AsteroidRepository {
         Log.v("AsteroidRepository", asteroidData)
 
 
-        val asteroidList = parseAsteroidResponse(asteroidData)
+        val asteroidList = parseAsteroidsJsonResult(JSONObject(asteroidData))
 
         return asteroidList
     }
