@@ -40,6 +40,12 @@ class MainFragment : Fragment() {
             asteroidAdapter.submitList(list)
             Log.v("MainFragment", "New List Submitted $list")
         })
+
+        viewModel.pictureOfDay.observe(viewLifecycleOwner, Observer {
+            binding.pictureOfDay = it
+            Log.v("MainFragment", "$it")
+        })
+        binding.executePendingBindings()
         setHasOptionsMenu(true)
 
         return binding.root

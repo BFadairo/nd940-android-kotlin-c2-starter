@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.asteroid.AsteroidRepository
 import com.udacity.asteroidradar.api.database.AsteroidDao
 import kotlinx.coroutines.Dispatchers
@@ -22,9 +23,14 @@ class MainViewModel(private val dataSource: AsteroidDao) : ViewModel() {
     val asteroidList: LiveData<List<Asteroid>>
         get() = _asteroidList
 
+    private val _pictureOfDay = MutableLiveData<PictureOfDay>()
+    val pictureOfDay: LiveData<PictureOfDay>
+        get() = _pictureOfDay
+
     init {
 //        callAsteroidApi("2021-06-02", "2021-06-09", "rpkESuINzPffq1qbOY8P9AfrTLXnvA8PjlW5OnhL")
         getAsteroidsByWeek()
+        getPictureOfDayFromNasa("rpkESuINzPffq1qbOY8P9AfrTLXnvA8PjlW5OnhL")
     }
 
     fun getAsteroidsByDate() {
@@ -53,11 +59,23 @@ class MainViewModel(private val dataSource: AsteroidDao) : ViewModel() {
             _asteroidList.value = asteroidList
         }
     }
+
+    private fun getPictureOfDayFromNasa(apiKey: String) {
+        viewModelScope.launch {
+            val pictureOfDay = getPictureOfTheDay(apiKey)
+            _pictureOfDay.value = pictureOfDay
+        }
+    }
     private fun callAsteroidApi(startDate: String, endDate: String, apiKey: String) {
         viewModelScope.launch {
             val asteroidList = callAsteroidClient(startDate, endDate, apiKey)
             insertAsteroidsIntoDatabase(asteroidList)
         }
+    }
+
+    private suspend fun getPictureOfTheDay(apiKey: String): PictureOfDay {
+        val pictureOfDay = AsteroidRepository().getPictureOfDay(apiKey)
+        return pictureOfDay
     }
 
     private suspend fun callAsteroidClient(startDate: String, endDate: String, apiKey: String): List<Asteroid> {

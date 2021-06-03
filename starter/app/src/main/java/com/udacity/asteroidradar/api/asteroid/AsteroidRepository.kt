@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.api.asteroid
 
 import android.util.Log
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import org.json.JSONException
@@ -9,6 +10,12 @@ import org.json.JSONObject
 
 class AsteroidRepository {
     private var asteroidClient = AsteroidClient().asteroidData
+
+    suspend fun getPictureOfDay(apiKey: String): PictureOfDay {
+        val pictureOfDay = asteroidClient.getPictureOfTheDay(apiKey)
+
+        return pictureOfDay
+    }
 
     suspend fun getAsteroidData(
         startDate: String,
