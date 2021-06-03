@@ -24,6 +24,7 @@ class MainViewModel(private val dataSource: AsteroidDao) : ViewModel() {
 
     init {
 //        callAsteroidApi("2021-06-02", "2021-06-09", "rpkESuINzPffq1qbOY8P9AfrTLXnvA8PjlW5OnhL")
+        getAsteroidsByWeek()
     }
 
     fun getAsteroidsByDate() {
@@ -40,11 +41,12 @@ class MainViewModel(private val dataSource: AsteroidDao) : ViewModel() {
 
     fun getAsteroidsByWeek() {
         viewModelScope.launch {
+            // Format the Date into the same format as what the API dates for queries
             val currentDate = Calendar.getInstance()
             val formatter = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.US)
             val formattedStartDate = formatter.format(currentDate.time)
 
-            currentDate.add(Calendar.DATE, 7)
+            currentDate.add(Calendar.DATE, 7) // Add 7 Days as we want to get asteroids in a week span
 
             val formattedEndDate = formatter.format(currentDate.time)
             val asteroidList = getAsteroidsFromDatabaseByWeek(formattedStartDate, formattedEndDate)
