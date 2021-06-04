@@ -12,7 +12,7 @@ class AsteroidRadarApplication: Application() {
         super.onCreate()
         Log.v("MainApplication", "Main Application")
         val fetchAsteroidWorkRequest: PeriodicWorkRequest =
-            PeriodicWorkRequestBuilder<FetchAsteroidsWorker>(15, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<FetchAsteroidsWorker>(24, TimeUnit.HOURS)
                 .setConstraints(Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .setRequiresCharging(true)
@@ -21,10 +21,8 @@ class AsteroidRadarApplication: Application() {
                 .build()
 
         WorkManager
-            .getInstance().enqueueUniquePeriodicWork("fetchAsteroids",
+            .getInstance(applicationContext).enqueueUniquePeriodicWork("fetchAsteroids",
                 ExistingPeriodicWorkPolicy.KEEP,
                 fetchAsteroidWorkRequest)
-
-
     }
 }

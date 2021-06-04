@@ -66,12 +66,13 @@ class MainViewModel(private val dataSource: AsteroidDao) : ViewModel() {
             _pictureOfDay.value = pictureOfDay
         }
     }
-    private fun callAsteroidApi(startDate: String, endDate: String, apiKey: String) {
-        viewModelScope.launch {
-            val asteroidList = callAsteroidClient(startDate, endDate, apiKey)
-            insertAsteroidsIntoDatabase(asteroidList)
-        }
-    }
+
+//    private fun callAsteroidApi(startDate: String, endDate: String, apiKey: String) {
+//        viewModelScope.launch {
+//            val asteroidList = callAsteroidClient(startDate, endDate, apiKey)
+//            insertAsteroidsIntoDatabase(asteroidList)
+//        }
+//    }
 
     private suspend fun getPictureOfTheDay(apiKey: String): PictureOfDay {
         val pictureOfDay = AsteroidRepository().getPictureOfDay(apiKey)

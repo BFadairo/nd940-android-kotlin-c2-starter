@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.workers
 
 import android.content.Context
 import android.util.Log
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.udacity.asteroidradar.Constants
@@ -17,23 +18,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FetchAsteroidsWorker(appContext: Context, workerParams: WorkerParameters):
-    Worker(appContext, workerParams) {
-    override fun doWork(): Result {
+    CoroutineWorker(appContext, workerParams) {
+    override suspend fun doWork(): Result {
         val appContext = applicationContext
         val database = AsteroidClient().asteroidData
 
-        Log.v("WorkManager", "Inside Work manager")
-        try {
+        return try {
             Log.v("WorkManager", "Inside try work manager")
             val database = AsteroidDatabase.getInstance(appContext).asteroidDao
-            CoroutineScope(Dispatchers.IO).launch {
-                fetchAsteroidsFromNasa(database)
-            }
+            fetchAsteroidsFromNasa(database)
             Log.v("WorkManager", "Returning Success")
-            return Result.success()
+            Result.success()
         } catch (throwable: Throwable) {
             Log.e("FetchAsteroidsWorker", "Error Fetching Asteroid List: ${throwable.message}")
-            return Result.failure()
+            Result.failure()
         }
     }
 

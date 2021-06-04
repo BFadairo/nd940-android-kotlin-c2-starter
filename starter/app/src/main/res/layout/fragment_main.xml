@@ -33,6 +33,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
+                android:contentDescription="@{pictureOfDay.title}"
                 app:loadImage="@{pictureOfDay.url}" />
 
             <TextView
