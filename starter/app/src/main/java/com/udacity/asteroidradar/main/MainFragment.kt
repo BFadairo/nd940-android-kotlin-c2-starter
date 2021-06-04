@@ -68,7 +68,6 @@ class MainFragment : Fragment() {
         asteroidAdapter = AsteroidListAdapter(AsteroidClickListener { asteroid ->
             // Pass the asteroid into the DetailFragment
             findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
-            Toast.makeText(context, "You Clicked on ${asteroid.codename}", Toast.LENGTH_SHORT).show()
         })
 
         binding.asteroidRecycler.adapter = asteroidAdapter
